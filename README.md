@@ -1,11 +1,11 @@
-# 🌦️ GDG McGill — Introduction to React Workshop
+## 🌦️ GDG McGill — Introduction to React Workshop
 
 **Project:** Weather App  
 **Tech Stack:** React.js • CSS • OpenWeather API
 
 ---
 
-## 📘 Workshop Overview
+### 📘 Workshop Overview
 
 Welcome to the **Google Developer Group (GDG) McGill** hands-on workshop on **React.js**!  
 In this session, we learned the fundamentals of building a dynamic weather app using **React**, styled with **classic CSS**, and powered by live data from the **OpenWeather API**.
@@ -19,7 +19,7 @@ By the end of this workshop, participants gained practical experience in:
 
 ---
 
-## 🧠 Core React Concepts Covered
+### 🧠 Core React Concepts Covered
 
 - **Components** — The building blocks of any React app
 - **Props and State** — Passing and managing dynamic data
@@ -30,35 +30,13 @@ By the end of this workshop, participants gained practical experience in:
 
 ---
 
-## 🗂️ Project Structure
-
-src/
-├── assets/
-│ ├── clear.png
-│ ├── cloud.png
-│ ├── drizzle.png
-│ ├── humidity.png
-│ ├── rain.png
-│ ├── search.png
-│ ├── snow.png
-│ └── wind.png
-│
-├── components/
-│ ├── Weather.css
-│ └── Weather.jsx
-│
-├── App.css
-├── App.jsx
-├── index.css
-└── main.jsx
-
-# ⚙️ Installation & Setup Guide
+### ⚙️ Installation & Setup Guide
 
 Follow these steps to run the **GDG McGill React Weather App** on your local machine.
 
 ---
 
-## 🧩 Prerequisites
+### 🧩 Prerequisites
 
 Before starting, make sure you have the following installed:
 
@@ -69,14 +47,14 @@ Before starting, make sure you have the following installed:
 
 ---
 
-## Step 1 — Clone the Repository
+### Step 1 — Clone the Repository
 
 ```bash
 git clone https://github.com/dwei-exe/react-workshop-gdg.git
 cd react-weather-app
 ```
 
-## Step 2 — Install Dependencies
+### Step 2 — Install Dependencies
 
 Run the following command to install all required packages:
 
@@ -84,7 +62,7 @@ Run the following command to install all required packages:
 npm install
 ```
 
-## Step 3 - Start the app locally with:
+### Step 3 - Start the app locally with:
 
 ```bash
 npm run dev
