@@ -89,7 +89,7 @@ Handle Multiple Cities
 Add a feature that lets users add and delete multiple cities to view their weather data side by side.
 
 Explore Tailwind CSS
-Now that you know traditional CSS, try styling your components using Tailwind CSS:
+Now that you know traditional CSS, try styling your components using Tailwind CSS:  
 👉 https://tailwindcss.com/
 
 💡 Final Thoughts
