@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import Login from './components/Login';
 import SearchBar from './components/SearchBar';
 import WeatherCard from './components/WeatherCard';
 import { getFavoriteCities, addFavoriteCity, removeFavoriteCity } from './lib/weatherService';
 import './App.css';
 
-const App = () => {
+const MainApp = () => {
   const [weatherCards, setWeatherCards] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { user } = useAuth();
 
   // Fetch weather data for a city from OpenWeather API
   const fetchWeatherData = async (city) => {
@@ -57,8 +60,10 @@ const App = () => {
       }
     };
 
-    loadFavoriteCities();
-  }, []);
+    if (user) {
+      loadFavoriteCities();
+    }
+  }, [user]);
 
   const addWeatherCard = async (city) => {
     if (city === "") {
@@ -131,4 +136,26 @@ const App = () => {
   );
 };
 
-export default App;
+const App = () => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="app">
+        <div className="no-cities">
+          <p>Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return user ? <MainApp /> : <Login />;
+};
+
+const AppWithAuth = () => (
+  <AuthProvider>
+    <App />
+  </AuthProvider>
+);
+
+export default AppWithAuth;

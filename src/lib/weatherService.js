@@ -1,79 +1,50 @@
 import { supabase } from './supabaseClient';
 
-// For now, we'll use a hardcoded user ID since auth is disabled
-// In production, this would come from the authenticated user
-const TEMP_USER_ID = 1;
+// Get the authenticated user's ID from Supabase
+const getCurrentUserId = async () => {
+  const { data: { user } } = await supabase.auth.getUser();
+  return user?.id;
+};
 
-/**
- * Fetch all favorite cities for the current user
- * Each city is stored as a separate row in the favorite_cities table
- */
+// Fetch all favorite cities for the current user from Supabase
 export const getFavoriteCities = async () => {
-  try {
-    const { data, error } = await supabase
-      .from('favorite_cities')
-      .select('city_name')
-      .eq('user_id', TEMP_USER_ID);
+  const userId = await getCurrentUserId();
+  if (!userId) return [];
 
-    if (error) {
-      console.error('Error fetching favorite cities:', error);
-      return [];
-    }
+  const { data, error } = await supabase
+    .from('favorite_cities')
+    .select('city_name')
+    .eq('user_id', userId);
 
-    // Extract just the city names from the array of objects
-    return data.map(row => row.city_name);
-  } catch (error) {
-    console.error('Error in getFavoriteCities:', error);
-    return [];
-  }
+  return error ? [] : data.map(row => row.city_name);
 };
 
-/**
- * Add a city to the user's favorites
- * Inserts a new row in the favorite_cities table
- */
+// Add a new city to the user's favorites in Supabase
 export const addFavoriteCity = async (cityName) => {
-  try {
-    // Insert the new favorite city
-    const { error } = await supabase
-      .from('favorite_cities')
-      .insert({
-        user_id: TEMP_USER_ID,
-        city_name: cityName
-      });
+  const userId = await getCurrentUserId();
+  if (!userId) return { success: false, message: 'Not authenticated' };
 
-    if (error) {
-      console.error('Error adding favorite city:', error);
-      return { success: false, message: `Failed to add city: ${error.message}` };
-    }
+  const { error } = await supabase
+    .from('favorite_cities')
+    .insert({ user_id: userId, city_name: cityName });
 
-    return { success: true };
-  } catch (error) {
-    console.error('Error in addFavoriteCity:', error);
-    return { success: false, message: `An error occurred: ${error.message}` };
-  }
+  return error 
+    ? { success: false, message: error.message } 
+    : { success: true };
 };
 
-/**
- * Remove a city from the user's favorites
- * Deletes the row from the favorite_cities table
- */
+// Remove a city from the user's favorites in Supabase
 export const removeFavoriteCity = async (cityName) => {
-  try {
-    const { error } = await supabase
-      .from('favorite_cities')
-      .delete()
-      .eq('user_id', TEMP_USER_ID)
-      .eq('city_name', cityName);
+  const userId = await getCurrentUserId();
+  if (!userId) return { success: false, message: 'Not authenticated' };
 
-    if (error) {
-      console.error('Error removing favorite city:', error);
-      return { success: false, message: `Failed to remove city: ${error.message}` };
-    }
+  const { error } = await supabase
+    .from('favorite_cities')
+    .delete()
+    .eq('user_id', userId)
+    .eq('city_name', cityName);
 
-    return { success: true };
-  } catch (error) {
-    console.error('Error in removeFavoriteCity:', error);
-    return { success: false, message: `An error occurred: ${error.message}` };
-  }
+  return error 
+    ? { success: false, message: error.message } 
+    : { success: true };
 };
