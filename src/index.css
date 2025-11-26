@@ -7,8 +7,12 @@
   font-family: "Poppins", sans-serif;
 }
 
+body {
+  overflow-x: hidden;
+}
+
 .app {
   min-height: 100vh;
-  display: grid;
-  background-color: #002855;
+  background: linear-gradient(135deg, #4a3f7a 0%, #2d1b69 50%, #1a0f3d 100%);
 }
+
