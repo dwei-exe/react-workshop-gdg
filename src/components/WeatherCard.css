@@ -46,11 +46,45 @@
   transition: all 0.3s ease;
   line-height: 1;
   padding: 0;
+  z-index: 10;
 }
 
 .remove-button:hover {
   background: rgba(255, 59, 48, 0.8);
   transform: scale(1.1);
+}
+
+.favorite-button {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  padding: 0;
+  z-index: 10;
+}
+
+.favorite-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.favorite-button.favorited {
+  background: rgba(255, 59, 98, 0.3);
+  color: #ff3b62;
+}
+
+.favorite-button.favorited:hover {
+  background: rgba(255, 59, 98, 0.5);
 }
 
 .card-header {
