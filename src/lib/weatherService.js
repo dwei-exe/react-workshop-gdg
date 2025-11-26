@@ -11,7 +11,7 @@ export const getFavoriteCities = async () => {
   try {
     const { data, error } = await supabase
       .from('weather-auth')
-      .select('*')
+      .select('favourite_cities')
       .eq('id', TEMP_USER_ID)
       .single();
 
@@ -20,8 +20,29 @@ export const getFavoriteCities = async () => {
       return [];
     }
 
-    // Parse the favourite_cities field (assuming it's stored as an array or JSON)
-    return data?.favourite_cities || [];
+    console.log('Raw data from Supabase:', data);
+    console.log('favourite_cities type:', typeof data?.favourite_cities);
+    console.log('favourite_cities value:', data?.favourite_cities);
+
+    // Handle different possible formats of the data
+    let cities = data?.favourite_cities;
+    
+    // If it's null or undefined, return empty array
+    if (!cities) {
+      return [];
+    }
+    
+    // If it's a string, try to parse it as JSON
+    if (typeof cities === 'string') {
+      try {
+        cities = JSON.parse(cities);
+      } catch (e) {
+        console.error('Failed to parse favourite_cities as JSON:', e);
+        return [];
+      }
+    }
+    
+    return cities;
   } catch (error) {
     console.error('Error in getFavoriteCities:', error);
     return [];
@@ -33,6 +54,8 @@ export const getFavoriteCities = async () => {
  */
 export const addFavoriteCity = async (cityName) => {
   try {
+    console.log('Adding city:', cityName);
+    
     // First, get current favorites
     const currentFavorites = await getFavoriteCities();
     
@@ -49,17 +72,19 @@ export const addFavoriteCity = async (cityName) => {
     const { error } = await supabase
       .from('weather-auth')
       .update({ favourite_cities: updatedFavorites })
-      .eq('id', TEMP_USER_ID);
+      .eq('id', TEMP_USER_ID)
+      .select();
 
     if (error) {
       console.error('Error adding favorite city:', error);
-      return { success: false, message: 'Failed to add city' };
+      return { success: false, message: `Failed to add city: ${error.message}` };
     }
 
     return { success: true, favorites: updatedFavorites };
   } catch (error) {
     console.error('Error in addFavoriteCity:', error);
-    return { success: false, message: 'An error occurred' };
+    console.error('Error stack:', error.stack);
+    return { success: false, message: `An error occurred: ${error.message}` };
   }
 };
 
@@ -68,6 +93,8 @@ export const addFavoriteCity = async (cityName) => {
  */
 export const removeFavoriteCity = async (cityName) => {
   try {
+    console.log('Removing city:', cityName);
+    
     // Get current favorites
     const currentFavorites = await getFavoriteCities();
     
@@ -80,16 +107,18 @@ export const removeFavoriteCity = async (cityName) => {
     const { error } = await supabase
       .from('weather-auth')
       .update({ favourite_cities: updatedFavorites })
-      .eq('id', TEMP_USER_ID);
+      .eq('id', TEMP_USER_ID)
+      .select();
 
     if (error) {
       console.error('Error removing favorite city:', error);
-      return { success: false, message: 'Failed to remove city' };
+      return { success: false, message: `Failed to remove city: ${error.message}` };
     }
+
 
     return { success: true, favorites: updatedFavorites };
   } catch (error) {
     console.error('Error in removeFavoriteCity:', error);
-    return { success: false, message: 'An error occurred' };
+    return { success: false, message: `An error occurred: ${error.message}` };
   }
 };
